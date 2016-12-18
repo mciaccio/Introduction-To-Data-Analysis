@@ -53,5 +53,5 @@ gdp_us = gdp.loc['United States']
 # life_expectancy_us.plot()
 gdp_us.plot()
 
-# years or index of series - labels for the x axis, values on the y axis 
+# years or index of series - labels for the dataFrameApplyMap axis, values on the y axis 
 
