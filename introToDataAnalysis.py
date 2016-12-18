@@ -1,4 +1,6 @@
- 
+"""
+ plot show multiple charts histograms hist ....
+"""
  
 import os
 import unicodecsv 
