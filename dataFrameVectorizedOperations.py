@@ -155,7 +155,7 @@ def get_hourly_entries_and_exits(entries_and_exits):
     print("")
     
     # from instructor
-    # one line answer, als0 see vectorized operations subtaction below 
+    # one line answer, also see vectorized operations subtraction below 
     print("entries_and_exits.diff() -> ")
     print(entries_and_exits.diff())
     print("")
@@ -208,7 +208,7 @@ def get_hourly_entries_and_exits(entries_and_exits):
     x = entries_and_exits.ix[0,0]
     # move 1 to the next column
     y= entries_and_exits.ix[0,1]
-    print("x -> ")
+    print("dataFrameApplyMap -> ")
     print(x)
     #3144312
     print("y -> ")
@@ -256,5 +256,5 @@ get_hourly_entries_and_exits(entries_and_exits)
 print("")
 
 x = 5
-print("x - {}".format(x))
-print("type(x) - {}".format(type(x)))
+print("dataFrameApplyMap - {}".format(x))
+print("type(dataFrameApplyMap) - {}".format(type(x)))
