@@ -310,11 +310,30 @@ def get_hourly_entries_and_exits(entries_and_exits):
     print(ridership_df1.diff())
     print("")
     
+    
+    
+                                            
+    
     print("End get_hourly_entries_and_exits")
     
     return None
 
+def getHourly(df):
+    x = df.diff()
+    
+    print("324x - >")
+    print(x)
+    print("")
+    
+
+
+
 get_hourly_entries_and_exits(ridership_df)
+
+"""
+how to access part of a DataFrame 'ENTRIESn', 'EXITSn' - combined with groupby 
+"""
+ridership_df.groupby('UNIT')[['ENTRIESn', 'EXITSn']].apply(getHourly)
 
 
 print("")
