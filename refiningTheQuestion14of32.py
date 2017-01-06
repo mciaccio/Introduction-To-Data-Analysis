@@ -344,7 +344,7 @@ for account_key, engagement_for_student in engagement_by_account.items():
         
 '''    
     
-# instructors method
+# instructors method *** .items() ***
 # iterate, loop through the defaultdict, engagement_by_account, get the key and the value
 # get the key - udacity student - account_key
 # get the *** list *** of engagement records associated with *** THAT *** student 
