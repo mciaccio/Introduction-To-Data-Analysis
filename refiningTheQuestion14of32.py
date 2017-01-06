@@ -10,6 +10,8 @@ import csv
 from datetime import datetime as dt
 from collections import defaultdict
 import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
 
 DATADIR = '/Users/Menfi/Documents/gitBaseDirectory/IntroToDataAnalysis/dataFiles'
 
@@ -138,6 +140,11 @@ for engagment_record in daily_engagement:
     tempKey = engagment_record['acct']
     del  engagment_record['acct']
     engagment_record['account_key'] = tempKey 
+    if engagment_record['num_courses_visited'] > 0:
+        engagment_record['has_visited'] = 1
+    else:
+        engagment_record['has_visited'] = 0
+        
 # print("daily_engagement[0] - {}".format(daily_engagement[0]))
 #      daily_engagement[0] - {'num_courses_visited': 1, 'utc_date': datetime.datetime(2015, 1, 9, 0, 0), 'lessons_completed': 0, 'account_key': '0', 'projects_completed': 0, 'total_minutes_visited': 11.6793745}
 engagement_num_rows = len(daily_engagement)
@@ -166,8 +173,18 @@ for index, validEngagement in enumerate(non_udacity_engagement):
         # print("validEngagement['account_key'] - {}".format(validEngagement['account_key']))
         # print("index {}".format(index))
         # daily_engagement.csv - utc_date enrollments.csv - join_date 
+        # join_date
         time_delta = (validEngagement['utc_date'] - myJoinDate)
-        if time_delta.days < 7:
+        
+        # fixed bug 
+        # *** add *** and time_delta.days > 0
+        # insure validEngagement['utc_date'] AFTER myJoinDate
+        # handles use case where student has multiple enrollments.csv join_dates 
+        # if most recent enrollments.csv join_date is recent or "large"
+        # then the above subtraction will generate a negative number which is indeed less than 7 but use case invalid, incorrect
+        # checking for > 0 fixes the bug
+        # this insures working with engagement records associated with the MOST RECENT enrollment
+        if time_delta.days < 7 and time_delta.days >= 0:
             paid_engagement_in_first_week.append(validEngagement)
             
 print("len(paid_engagement_in_first_week) - {}\n".format(len(paid_engagement_in_first_week)))
@@ -211,7 +228,11 @@ for engagement in paid_engagement:
     myKey = engagement['account_key']
     myJoinDate = paid_students[myKey]
     time_delta = (engagement['utc_date'] - myJoinDate)
-    if time_delta.days < 7:
+    # bug fix
+    # add time_delta.days >= 0 
+    # insures working with engagement records associated with the MOST RECENT enrollment
+    # Not an OLD enrollment
+    if time_delta.days < 7 and time_delta.days >= 0:
         paid_engagement_in_first_week.append(engagement)
 print("len( paid_engagement_in_first_week) - {}\n".format(len( paid_engagement_in_first_week)))
 
@@ -339,7 +360,7 @@ for account_key, engagement_for_students in engagement_by_account.items():
         # print("engagement_record - {}".format(engagement_record))
         total_minutes += engagement_record['total_minutes_visited']
     # now populate the total_minutes_by_account Python Dictionary, account_key, the value is the grand total, the sum of the individual engagement_record['total_minutes_visited']
-    total_minutes_by_account[account_key] = total_minutes
+    total_minutes_by_account[account_key] = total_minutes       
          
 # Example best practices print, iterate, enumerate, loop, through only part of a Python Dictionary,  print only n (few) Python Dictionary entries  
 for index, key in enumerate(total_minutes_by_account):
@@ -366,6 +387,154 @@ print("np.max(list(total_minutes)) - {}\n".format(np.max(list(total_minutes))))
 # np.max(list(total_minutes)) - 10568.100867332541, > 10,000 minutes 
 # 60 * 24 * 7 = 10,080 minutes in a week, 10568.100867332541 -> greater than the number of minutes in a week, somenthing *** WRONG ***
 
+# Begin look for bad data
+student_with_max_minutes = None
+max_minutes = 0
+
+# Find the student with too many minutes, minutes total > total minutes in 1 week
+# Example -iterate, loop, through a Python Dictionary, get key, keys, value, values, pythonDictionary.items(), dot items  
+for student, total_minutes in total_minutes_by_account.items():
+    if total_minutes > max_minutes:
+        max_minutes = total_minutes
+        student_with_max_minutes = student
+print("student_with_max_minutes - {}".format(student_with_max_minutes))
+print("max_minutes - {}\n".format(max_minutes))
+
+# Example iterate, loop through a Python list
+# more than 7 records found, should only be seven - *** first_week ***
+# Time interval > 1 week, 1st record - January 7 -           -        last record - April 26, should only be 1 week - *** first_week ***
+# 'utc_date': datetime.datetime(2015, 1, 7, 0, 0)  -  'utc_date': datetime.datetime(2015, 4, 26, 0, 0), 
+# bug fix above *** add ***  and time_delta.days >= 0
+for engagement_record in paid_engagement_in_first_week:
+    if engagement_record['account_key'] == student_with_max_minutes:
+        print("engagement_record - {}".format(engagement_record))
+print("")
+
+# Example, best practices, instantiate, declare empty Python Dictionary
+total_lessons_completed_by_account = {}
+
+# instructors method
+# iterate, loop through the defaultdict, engagement_by_account, get the key and the value
+# Example - defaultdict, iterate, loop through get the key AND the key associated value
+# get the key - udacity student - account_key, default - dot items()
+# get the *** list *** of engagement records associated with *** THAT *** student, default - dot items() 
+for account_key, engagement_for_students in engagement_by_account.items():
+    # print("account_key - {}".format(account_key))
+    #        account_key - 188
+    
+    lessons_completed = 0
+    
+    # iterate through the list of that student's engagement records
+    # only purpose here is to sum engagement_record['lessons_completed']
+    for engagement_record in engagement_for_students:
+        # print("engagement_record - {}".format(engagement_record))
+        lessons_completed += engagement_record['lessons_completed']
+    # now populate the total_lessons_completed_by_account, Python Dictionary, account_key, the value is the grand total, the sum of the individual engagement_record['lessons_completed']
+    total_lessons_completed_by_account[account_key] = lessons_completed   
+    
+total_lessons = total_lessons_completed_by_account.values()
+
+# np.mean(list(total_lessons))
+print("np.mean(list(total_lessons)) - {}".format(np.mean(list(total_lessons))))
+print("np.std(list(total_lessons)) - {}".format(np.std(list(total_lessons))))
+print("np.min(list(total_lessons)) - {}".format(np.min(list(total_lessons))))
+print("np.max(list(total_lessons)) - {}".format(np.max(list(total_lessons))))
+print("")
+       
+# Example best practices print, iterate, enumerate, loop, through only part of a Python Dictionary,  print only n (few) Python Dictionary entries  
+for index, key in enumerate(total_minutes_by_account):
+    if index < 3:
+        print("key - {}\ttotal_minutes_by_account[key] - {} ".format(key, total_minutes_by_account[key]))
+        # print("key - {}\ttotal_minutes_by_account[key] - {} ".format(key, total_minutes_by_account[key]))
+print("")
+
+total_visits_in_first_week = {}
+
+# engagement_by_account = defaultdict(list)
+# break out the defaultdict(list)
+# the dictionary key is the account_key, the one value associated with that key is a *** list *** of records
+for account_key, engagement_for_students in engagement_by_account.items():
+    # print("account_key - {}".format(account_key))
+    #        account_key - 188
+    
+    visits_for_account = 0
+    
+    # iterate through the list of that student's engagement records
+    # only purpose here is to sum engagement_record['has_visited']
+    for engagement_record in engagement_for_students:
+        # print("engagement_record - {}".format(engagement_record))
+        visits_for_account += engagement_record['has_visited']
+    # now populate the total_lessons_completed_by_account, Python Dictionary, account_key, the value is the grand total, the sum of the individual engagement_record['lessons_completed']
+    total_visits_in_first_week[account_key] = visits_for_account   
+    
+# Example get the values
+total_visits = total_visits_in_first_week.values()
+# print("type(total_visits) - {}".format(type(total_visits)))
+#        type(total_visits) - <class 'dict_values'>
+print("np.mean(list(total_visits)) - {}".format(np.mean(list(total_visits))))
+print("np.min(list(total_visits)) - {}".format(np.min(list(total_visits))))
+print("np.max(list(total_visits)) - {}".format(np.max(list(total_visits))))
+print("np.std(list(total_visits)) - {}\n".format(np.std(list(total_visits))))
+ 
+print("paid_submissions[0] - {}\n".format(paid_submissions[0]))
+
+# Splitting out Passing Students 21/32 
+subway_project_lesson_keys = ['746169184', '3176718735']  
+passing_engagement = []
+non_passing_engagement = []
+
+# Example initialize an empty Python set  
+pass_subway_project = set()
+
+# First populate a *** set *** of the project_submissions.csv records, account_keys meeting the criteria
+# Example *** set *** - many to one conversion
+# Example *** set *** - for many records in file - 1 entry in set  
+for mySubmission in paid_submissions:
+    if (mySubmission['assigned_rating'] == 'PASSED') or (mySubmission['assigned_rating'] == 'DISTINCTION'):
+        if mySubmission['lesson_key'] in subway_project_lesson_keys:
+            pass_subway_project.add(mySubmission['account_key'])
+
+# Next iterate through the list of engagement records
+# populate lists driven by set population
+for engagement_record in paid_engagement_in_first_week:
+    if engagement_record['account_key'] in pass_subway_project:
+        passing_engagement.append(engagement_record)
+    else:
+        non_passing_engagement.append(engagement_record)
+
+print("passing_engagement[0]) - {}".format(passing_engagement[0]))
+print("len(pass_subway_project) - {}".format(len(pass_subway_project)))
+print("len(passing_engagement) - {}".format(len(passing_engagement)))
+print("len(non_passing_engagement) - {}".format(len(non_passing_engagement)))
+print("")
+
+passedLessonsCompleted = {}
+failedLessonsCompleted = {}
+
+for account_key, engagement_for_students in engagement_by_account.items():
+    tally = 0
+    if account_key in pass_subway_project:
+        for myEngagementRecord in engagement_for_students:
+            # print("myEngagementRecord - {}".format(myEngagementRecord))
+            tally += myEngagementRecord['lessons_completed']
+        passedLessonsCompleted[account_key] = tally
+    else:
+        for myEngagementRecord in engagement_for_students:
+            tally += myEngagementRecord['lessons_completed']
+        failedLessonsCompleted[account_key] = tally
+        
+passedValues = passedLessonsCompleted.values()
+failedValues = failedLessonsCompleted.values()
+
+# print("passedValues - {}".format(passedValues))
+print("np.mean(list(passedValues)) - {}".format(np.mean(list(passedValues))))
+# print("failedValues - {}".format(failedValues))
+print("np.mean(list(failedValues)) - {}".format(np.mean(list(failedValues))))
+
+plt.hist(list(passedValues))
+plt.show()
+
+ 
 print("Finished")
 
   
