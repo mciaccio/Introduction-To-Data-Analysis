@@ -90,7 +90,7 @@ for enrollment in enrollments:
         non_udacity_enrollments.append(enrollment)
 # print("len(non_udacity_enrollments) - {}\n".format(len(non_udacity_enrollments)))
 #        len(non_udacity_enrollments) - 1622
-# Example access a list slice, bracket semi colon semicolon, note append to the right makes 1 very long line  
+# Example access a list slice, bracket colon, note append to the right makes 1 very long line  
 # print("non_udacity_enrollments[1:9] - {}".format(non_udacity_enrollments[1:9]))
 
 # populate paid_students Dictionary - also update Dictionary value for a key that is already in the Python Dictionary 
