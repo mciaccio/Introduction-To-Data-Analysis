@@ -53,7 +53,7 @@ f.close
 
 '''
 Example 1 - iterate through a Python list, 3 times, print index, print value 
-Example 1 - access list square bracket, semi colon 
+Example 1 - access list square bracket, colon 
 '''
 for index, value in enumerate(enrollments[:2]):
     # print("index - {}".format(index))
@@ -98,7 +98,7 @@ with open(ENROLLMENT_DF, 'r') as f:
 print("enrollments[0] - {}".format(enrollments[0]))
 #        enrollments[0] - {'is_canceled': 'True', 'account_key': '448', 'is_udacity': 'True', 'days_to_cancel': '65', 'join_date': '2014-11-10', 'cancel_date': '2015-01-14', 'status': 'canceled'}
 
-# access a list, enumerate list, index and value, using square bracket semi colon notation 
+# access a list, enumerate list, index and value, using square bracket colon notation 
 for index, value in enumerate(enrollments[:1]):
     # print("index - {}".format(index))
     # print("value - {}".format(value))
@@ -128,6 +128,13 @@ enrollment_num_unique_students = len(enrollmentSet)
 # total enrollments greater than unique enrollments
 # 1640 - 1302 = 338
 print("enrollment_num_unique_students - {}\n".format(enrollment_num_unique_students))
+
+udacity_test_accounts = set()
+for enrollment in enrollments: 
+    if enrollment['is_udacity']:
+        udacity_test_accounts.add(enrollment['account_key'])
+print("udacity_test_accounts - {}".format(udacity_test_accounts))
+print("len(udacity_test_accounts) - {}".format(len(udacity_test_accounts)))
 
 udacity_test_accounts = set()
 for enrollment in enrollments: 
