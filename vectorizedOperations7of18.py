@@ -1,5 +1,5 @@
 '''
-Created on Jan 07, 2017
+Created on Jan 7, 2017
 
 @author: Menfi
 '''
