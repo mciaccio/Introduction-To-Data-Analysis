@@ -4,7 +4,7 @@ Created on Jan 8, 2017
 @author: Menfi
 '''
 
-print("\nBegin\n")
+print("\nBegin\n")  
 
 import pandas as pd
 import numpy as np
