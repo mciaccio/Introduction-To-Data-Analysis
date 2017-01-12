@@ -2,7 +2,7 @@
 Created on Jan 12, 2017
 
 @author: Menfi
-'''   
+'''
  
 import pandas as pd
 import seaborn as sns
@@ -44,5 +44,8 @@ print("type(employment.index.values) - {}".format(type(employment.index.values))
 
 # Example Panda Series histogram - worked in udacity browser only, data files not downloaded locally to Mac  
 employment_us.hist()
+
+# Example Panda Series histogram - worked in udacity browser only, data files not downloaded locally to Mac  
+employment_us.plot()
 
 
