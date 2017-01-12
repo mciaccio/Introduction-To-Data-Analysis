@@ -3,7 +3,7 @@ Created on Jan 12, 2017
 
 @author: Menfi
 '''
-# github .argmax(), NumPy arrays
+# github .argmax(), NumPy arrays    
 
 print("\nBegin\n")
 
