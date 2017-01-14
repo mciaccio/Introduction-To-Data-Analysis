@@ -1,17 +1,19 @@
+'''
+Created on Jan 14, 2017
 
-"""
-github - "pandas - applymap()"
-lecture notes -
-DataFrame out of the box builtin functions do not provide needed functionality.
-apply, applymap - custom function to DataFrame to get a new DataFrame 
-"""
+@author: Menfi
+'''
+
+# github DataFrame applymap()
+
+print("\nBegin\n")
 
 import pandas as pd
 
 # Change False to True for this block of code to see what it does
 
 # DataFrame applymap()
-if True:
+if False:
     df = pd.DataFrame({
         'a': [1, 2, 3],
         'b': [10, 20, 30],
@@ -20,45 +22,20 @@ if True:
     
     def add_one(x):
         return x + 1
-    
-    def getLetterGrade(x):
-        #print("x - {}".format(x))
-        #print("type(x) - {}".format(type(x)))
-        if x > 89:
-            return 'A'
-        elif x > 79:
-            return 'B'
-        elif x > 69:
-            return 'C'
-        elif x > 59:
-            return 'D'
-        else:
-            return 'F'
-               
-    """
-    df - original input DataFrame to be manipulated
-    applymap - out of box DataFrame function
-    add_one - custom function called - run on df - original input DataFrame 
-    """
+        
     # print df.applymap(add_one)
-    print("")
     print("df.applymap(add_one) -> ")
     print(df.applymap(add_one))
     print("")
     
-    print("original DataFrame unchanged")
-    print("df -> ")
-    print(df)
-    print("")
-
 grades_df = pd.DataFrame(
     data={'exam1': [43, 81, 78, 75, 89, 70, 91, 65, 98, 87],
           'exam2': [24, 63, 56, 56, 67, 51, 79, 46, 72, 60]},
     index=['Andre', 'Barry', 'Chris', 'Dan', 'Emilio', 
            'Fred', 'Greta', 'Humbert', 'Ivan', 'James']
 )
-
-def convert_grades(grades):
+    
+def convert_grades0(grades):
     '''
     Fill in this function to convert the given DataFrame of numerical
     grades to letter grades. Return a new DataFrame with the converted
@@ -71,32 +48,34 @@ def convert_grades(grades):
         60-69  -> D
         0-59   -> F
     '''
+    return grades + 1
+    # return None
     
-    print("grades -> ")
-    print(grades)
-    print("")
-    # print("type(grades) - {}".format(type(grades)))
-    # type(grades) - <class 'pandas.core.frame.DataFrame'>
-    
-    print("grades['exam1'] -> ")
-    print(grades['exam1'])
-    print("")
-    
-    """
-    applymap() documentation, lecture notes, example
-    no need to drill down into the individual elements of the input DataFrame
-    simply apply the custom function - getLetterGrade - to the input or original DataFrame
-    original DataFrame remains untouched
-    """
-    myDataFrame = grades.applymap(getLetterGrade)
-    print("myDataFrame -> ")
-    print(myDataFrame)
-    print("")
-#     print("type(myDataFrame) - {}".format(type(myDataFrame)))
-#     type(myDataFrame) - <class 'pandas.core.frame.DataFrame'>
-    
-    return None
+def convert_grades(grades):
+    if grades > 89:
+        return 'A'
+    elif grades > 79:
+        return 'B'
+    elif  grades > 69:
+        return 'C'
+    elif grades > 59:
+        return 'D'
+    else:
+        return 'F' 
 
-convert_grades(grades_df)
+letterGrades0 = convert_grades0(grades_df)
+print("letterGrades0 -> ")
+print(letterGrades0)
+print("")
+
+letterGrades = grades_df.applymap(convert_grades0)
+print("letterGrades -> ")
+print(letterGrades)
+print("")
+
+letterGrades = grades_df.applymap(convert_grades)
+print("letterGrades -> ")
+print(letterGrades)
+print("")
 
 
