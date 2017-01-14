@@ -90,6 +90,7 @@ def get_hourly_entries_and_exits(entries_and_exits):
     print("type(differenceEntriesAndExits) - {}".format(type(differenceEntriesAndExits)))
     print("")
     
+    # Example Pandas DataFrame - arithmetic difference, subtraction, diff, diff() method
     instructorAnswer = entries_and_exits.diff()
     print("instructorAnswer -> ")
     print(instructorAnswer)
