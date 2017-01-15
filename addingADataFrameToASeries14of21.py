@@ -4,6 +4,8 @@ Created on Jan 15, 2017
 @author: Menfi
 '''
 
+# github use *** axis *** argument, parameter, when adding a Pandas Series to a Pandas DataFrame
+
 import pandas as pd 
 
 print("\nBegin\n")
@@ -12,7 +14,7 @@ print("\nBegin\n")
 
 # Example - Adding a Series to a square DataFrame
 # integers of the Pandas Series are added to the integers of the Pandas DataFrame 
-if True:
+if False:
     s = pd.Series([1, 2, 3, 4])
     df = pd.DataFrame({
         0: [10, 20, 30, 40],
@@ -67,7 +69,8 @@ if False:
 # Adding a Series to a one-column DataFrame
 # Pandas Series Integers added to the first column, NaN all the rest 
 # Example - create, instantiate, populate 1 column Pandas DataFrame  
-if False:
+# Example - use *** axis *** argument, parameter, when adding a Pandas Series to a Pandas DataFrame  
+if True:
     s = pd.Series([1, 2, 3, 4])
     df = pd.DataFrame({0: [10, 20, 30, 40]})
     
@@ -86,7 +89,15 @@ if False:
     print(df + s)
     # print("type(df + s) - {}".format(type(df + s)))
     # type(df + s) - <class 'pandas.core.frame.DataFrame'>
-    # print("")
+    print("")
+    
+    print(df.add(s))
+    print("92")
+    # Example - axis = 0 fixes problem - add a Pandas Series to a one (1) column DataFrame, use axis = 0 for expected results  
+    print(df.add(s, axis = 0)) # works
+    print(df.add(s, axis = 'columns')) # does not work - Nan
+    print(df.add(s, axis = 'rows')) # works Pandas Series integers add to Pandas DataFrame integers  
+    print(df.add(s, axis = 'index')) # instructor method - works Pandas Series integers add to Pandas DataFrame integers  
     
 # Adding when DataFrame column names match Series index
 # Pandas Series integers successfully added to Pandas DataFrame integers 
