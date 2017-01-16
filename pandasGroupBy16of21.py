@@ -4,12 +4,12 @@ Created on Jan 15, 2017
 @author: Menfi
 '''
 
-# github *** DataFrameGroupBy object ***, *** .groups - understand what is going on *** make plots, matplotlib, seaborn
+# github *** DataFrameGroupBy object ***, *** .groups - understand what is going on *** make plots, matplotlib, seaborn *** simple plot ***
 
 print("\nBegin\n")
 
 import matplotlib.pyplot as plt
-import numpy as np
+import numpy as np   
 import pandas as pd
 import seaborn as sns
 
@@ -141,7 +141,8 @@ ridershipDayOfWeek = grouped_data.sum()['ENTRIESn']
 # type(ridershipDayOfWeek) - <class 'pandas.core.series.Series'>
 
 # Example - simple Pandas Series working plot 
-ridershipDayOfWeek.plot(kind = 'bar')
+# ridershipDayOfWeek.plot(kind = 'bar')
+ridershipDayOfWeek.plot()
 plt.show() # required !!
 
 print("\nEnd\n")
