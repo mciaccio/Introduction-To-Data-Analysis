@@ -54,7 +54,7 @@ if False :
     print("")
     
 # Group by multiple columns
-# Example - group Pandas DataFrame by multiple columns
+# Example - group Pandas DataFrame by multiple columns, groupby multiple columns, two 2 columns
 if False:
     grouped_data = example_df.groupby(['even', 'above_three'])
     print("type(grouped_data) - {}".format(type(grouped_data)))
@@ -141,7 +141,7 @@ ridershipDayOfWeek = grouped_data.sum()['ENTRIESn']
 # type(ridershipDayOfWeek) - <class 'pandas.core.series.Series'>
 
 # Example - simple Pandas Series working plot 
-# ridershipDayOfWeek.plot(kind = 'bar')
+# ridershipDayOfWeek.plot(kind = 'bar') # WORKS
 ridershipDayOfWeek.plot()
 plt.show() # required !!
 
