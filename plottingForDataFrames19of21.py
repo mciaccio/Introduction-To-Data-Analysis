@@ -10,7 +10,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import seaborn as sns
-import pylab
+import pylab # scatter plot, fix scatter plot will not show or render
  
 print("\nBegin\n")
 
